@@ -36,9 +36,6 @@ describe("Entrega Final: Pre Entrega", () =>{
         shoppingCartPage.verifyProductPrice(InputData.product.productName2,InputData.product.price2);
         shoppingCartPage.clickShowTotalPrice();
         shoppingCartPage.verifyTotalPrice(InputData.product.price1,InputData.product.price2);
-        
-
-
-    })
+    });
 
 })
