@@ -2,7 +2,7 @@ export class ProductsPage{
     
     constructor(){
         this.closeModal = "#closeModal";
-        this.goShoppingCartButton ="#goShoppingCart";
+        this.goShoppingCartButton ="#goShoppingCart"
 
     };
 
