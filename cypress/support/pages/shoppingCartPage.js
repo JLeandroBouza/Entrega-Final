@@ -1,7 +1,7 @@
 export class ShoppingCartPage{
     constructor(){
         this.clickShowTotalPriceButton = ("Show total price")
-    };
+    }
 
     verifyProductName(product){
         cy.xpath(`//div//descendant::p[@name='${product}']`).should("have.text",`${product}`);
