@@ -4,20 +4,16 @@ export class ShoppingCartPage{
     }
 
     verifyProductName(product){
-        cy.xpath(`//div//descendant::p[@name='${product}']`).should("have.text",`${product}`);
+        return cy.xpath(`//div//descendant::p[@name='${product}']`)
     };
 
     verifyProductPrice(product,price){
-        cy.xpath(`//div//descendant::p[@name='${product}']`).siblings("#productPrice").should("have.text",`$${price}`)
+        return cy.xpath(`//div//descendant::p[@name='${product}']`).siblings("#productPrice")
     };
 
     verifyTotalPrice(price1,price2){
-        const sumTotal= price1 + price2
-        cy.xpath("//div//descendant::p[@id='price']").should("have.text", sumTotal)
-    };
-
-    clickShowTotalPrice(){
         cy.contains(this.clickShowTotalPriceButton).click();
+        return cy.xpath("//div//descendant::p[@id='price']")
     };
 }
 
