@@ -15,17 +15,24 @@ describe("Entrega Final: Pre Entrega", () =>{
     const reciptPage = new ReciptPage();
     
 
-    before("Carga de Datos del Fixture data y Solicitud a la API de Registro de Usuario",() =>{
+    before("Carga de Datos del Fixture data",() =>{
+
+       cy.fixture("data").then(data =>{
+            InputData = data
+        });
+       
+    });
+
+    it("Entrega Final: CheckOut del ShoppingCart", () =>{
+        
         const username = "leandro2";
         const password = "123456!";
         const gender = "Male";
         const day = "14";
         const month = "february";
         const year = "1986";
+        const sumTotal= `${InputData.product.price1 + InputData.product.price2}`
 
-        cy.fixture("data").then(data =>{
-            InputData = data
-        });
         cy.request({
             url: 'https://pushing-it.onrender.com/api/register',
             method: 'POST',
@@ -38,6 +45,7 @@ describe("Entrega Final: Pre Entrega", () =>{
                 year: year
             },
         }).then(response => {
+            expect(response.status).equal(200);
             cy.request({
                 url: 'https://pushing-it.onrender.com/api/login',
                 method: 'POST',
@@ -51,13 +59,6 @@ describe("Entrega Final: Pre Entrega", () =>{
             localStorage.setItem("password",response.user.password);
 
         });
-    });
-
-
-
-    it("Entrega Final: CheckOut del ShoppingCart", () =>{
-
-        const sumTotal= `${InputData.product.price1 + InputData.product.price2}`
 
         cy.visit(" ");
         homePage.clickOnlineShop();
@@ -77,7 +78,7 @@ describe("Entrega Final: Pre Entrega", () =>{
 
     after ("Borrado del Usuario", ()=>{
         cy.request({
-            url: `https://pushing-it.onrender.com/api/deleteuser/${username}`,
+            url: `https://pushing-it.onrender.com/api/deleteuser/${response.user.username}`,
             method: 'DELETE',
         });
         cy.clearAllLocalStorage();
