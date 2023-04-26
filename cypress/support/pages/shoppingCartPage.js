@@ -1,23 +1,24 @@
 export class ShoppingCartPage{
     constructor(){
         this.clickShowTotalPriceButton = ("Show total price")
+        this.clickGotoCheckOutButton= ("Go to Checkout")
     }
 
     verifyProductName(product){
-        cy.xpath(`//div//descendant::p[@name='${product}']`).should("have.text",`${product}`);
+        return cy.xpath(`//div//descendant::p[@name='${product}']`)
     };
 
     verifyProductPrice(product,price){
-        cy.xpath(`//div//descendant::p[@name='${product}']`).siblings("#productPrice").should("have.text",`$${price}`)
+        return cy.xpath(`//div//descendant::p[@name='${product}']`).siblings("#productPrice")
     };
 
     verifyTotalPrice(price1,price2){
-        const sumTotal= price1 + price2
-        cy.xpath("//div//descendant::p[@id='price']").should("have.text", sumTotal)
+        cy.contains(this.clickShowTotalPriceButton).click();
+        return cy.xpath("//div//descendant::p[@id='price']")
     };
 
-    clickShowTotalPrice(){
-        cy.contains(this.clickShowTotalPriceButton).click();
+    clickGotoCheckOut(){
+        cy.contains(this.clickGotoCheckOutButton).click();
     };
 }
 
