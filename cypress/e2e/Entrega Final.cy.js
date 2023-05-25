@@ -5,6 +5,7 @@ import { ProductsPage } from "../support/pages/productsPage";
 import { ShoppingCartPage } from "../support/pages/shoppingCartPage";
 import { CheckOutPage } from "../support/pages/checkOutPage";
 import { ReciptPage } from "../support/pages/reciptPage";
+const constantes = require("../support/constantes");
 
 describe("Entrega Final: Pre Entrega", () =>{
     let InputData;
@@ -13,6 +14,12 @@ describe("Entrega Final: Pre Entrega", () =>{
     const shoppingCartPage = new ShoppingCartPage();
     const checkOutPage = new CheckOutPage();
     const reciptPage = new ReciptPage();
+    const username = "leandro2";
+    const password = "123456!";
+    const gender = "Male";
+    const day = "14";
+    const month = "february";
+    const year = "1986";
     
 
     before("Carga de Datos del Fixture data",() =>{
@@ -25,12 +32,6 @@ describe("Entrega Final: Pre Entrega", () =>{
 
     it("Entrega Final: CheckOut del ShoppingCart", () =>{
         
-        const username = "leandro2";
-        const password = "123456!";
-        const gender = "Male";
-        const day = "14";
-        const month = "february";
-        const year = "1986";
         const sumTotal= `${InputData.product.price1 + InputData.product.price2}`
 
         cy.request({
@@ -53,10 +54,12 @@ describe("Entrega Final: Pre Entrega", () =>{
                     username: username,
                     password: password
                 },
+            }).then(response => {
+                localStorage.setItem("token", response.body.token);
+                localStorage.setItem("username",response.body.user.username);
+                localStorage.setItem("password",response.body.user.password);
             });
-            localStorage.setItem("token", response.token);
-            localStorage.setItem("username",response.user.username);
-            localStorage.setItem("password",response.user.password);
+            
 
         });
 
@@ -71,14 +74,21 @@ describe("Entrega Final: Pre Entrega", () =>{
         shoppingCartPage.verifyProductPrice(InputData.product.productName2,InputData.product.price2).should("have.text",`$${InputData.product.price2}`);
         shoppingCartPage.verifyTotalPrice(InputData.product.price1,InputData.product.price2).should("have.text", sumTotal);
         shoppingCartPage.clickGotoCheckOut();
-        
+        checkOutPage.inputPurchaseData(InputData.checkout.firstname, InputData.checkout.lastname, InputData.checkout.cardnumber);
+        checkOutPage.purchaseWaits();
+        reciptPage.verifyFirstName(InputData.checkout.firstname).should("have.text",`${InputData.checkout.firstname}`);
+        reciptPage.verifyLastName(InputData.checkout.lastname).should("have.text",`${InputData.checkout.lastname}`);
+        reciptPage.verifyProductName(InputData.product.productName1).should("have.text",`${InputData.product.productName1}`);
+        reciptPage.verifyProductName(InputData.product.productName2).should("have.text",`${InputData.product.productName2}`);
+        reciptPage.verifyCardNumber(InputData.checkout.cardnumber).should("have.text",`${InputData.checkout.cardnumber}`);
+        reciptPage.verifyTotalPrice(InputData.product.price1, InputData.product.price2).should("have.text", sumTotal);
 
 
     });
 
     after ("Borrado del Usuario", ()=>{
         cy.request({
-            url: `https://pushing-it.onrender.com/api/deleteuser/${response.user.username}`,
+            url: `https://pushing-it.onrender.com/api/deleteuser/${username}`,
             method: 'DELETE',
         });
         cy.clearAllLocalStorage();

@@ -8,11 +8,11 @@ export class ShoppingCartPage{
         return cy.xpath(`//div//descendant::p[@name='${product}']`)
     };
 
-    verifyProductPrice(product,price){
+    verifyProductPrice(product){
         return cy.xpath(`//div//descendant::p[@name='${product}']`).siblings("#productPrice")
     };
 
-    verifyTotalPrice(price1,price2){
+    verifyTotalPrice(){
         cy.contains(this.clickShowTotalPriceButton).click();
         return cy.xpath("//div//descendant::p[@id='price']")
     };
